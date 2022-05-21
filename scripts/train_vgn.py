@@ -17,7 +17,7 @@ from vgn.networks import get_network
 def main(args):
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
-    kwargs = {"num_workers": 4, "pin_memory": True} if use_cuda else {}
+    kwargs = {"num_workers": 8, "pin_memory": True} if use_cuda else {}
 
     # create log directory
     time_stamp = datetime.now().strftime("%y-%m-%d-%H-%M")
