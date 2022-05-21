@@ -155,7 +155,7 @@ if __name__ == "__main__":
     parser.add_argument("root", type=Path)
     parser.add_argument("--scene", type=str, choices=["pile", "packed"], default="pile")
     parser.add_argument("--object-set", type=str, default="blocks")
-    parser.add_argument("--num-grasps", type=int, default=10000)
+    parser.add_argument("--num-grasps", type=int, default=1000000)
     parser.add_argument("--sim-gui", action="store_true")
     args = parser.parse_args()
     main(args)
