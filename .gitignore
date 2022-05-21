@@ -109,3 +109,9 @@ venv.bak/
 
 # data
 data
+
+# JetBrains files
+.idea/
+
+# macOS files
+.DS_Store
