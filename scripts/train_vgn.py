@@ -15,6 +15,8 @@ from vgn.networks import get_network
 
 
 def main(args):
+    print(args)
+
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
     kwargs = {"num_workers": 8, "pin_memory": True} if use_cuda else {}
