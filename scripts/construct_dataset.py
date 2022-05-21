@@ -25,12 +25,12 @@ def main(args):
     df["x"] /= voxel_size
     df["y"] /= voxel_size
     df["z"] /= voxel_size
-
-    df["x"] = df[df.x < 39.5]
-    df["y"] = df[df.y < 39.5]
-    df["z"] = df[df.z < 39.5]
-
     df["width"] /= voxel_size
+
+    df = df[df["x"] < 39.5]
+    df = df[df["y"] < 39.5]
+    df = df[df["z"] < 39.5]
+
     df = df.rename(columns={"x": "i", "y": "j", "z": "k"})
     write_df(df, args.dataset)
 
