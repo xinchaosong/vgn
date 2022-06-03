@@ -13,12 +13,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="obj_name.obj"/>
+        <mesh filename="obj_path"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="obj_name.obj"/>
+        <mesh filename="obj_path"/>
       </geometry>
     </collision>
   </link>

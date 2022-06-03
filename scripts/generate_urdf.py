@@ -1,37 +1,35 @@
 import os
-from pathlib import Path
 import h5py
+from tqdm import tqdm
 
-acronym_path = "/media/DATACENTER2/HiLo_other_approaches/Acronym/"
+from path import acronym_path, vgn_data_path
+
 acronym_grasps_path = os.path.join(acronym_path, "grasps")
 
-urdfs_path = Path(__file__).resolve().parent.parent / "data" / "urdfs" / "acronym"
-urdfs_train_path = str(urdfs_path / "train")
-urdfs_val_path = str(urdfs_path / "val")
-urdfs_test_path = str(urdfs_path / "test")
+urdfs_path = os.path.join(vgn_data_path, "urdfs", "acronym")
+urdfs_train_path = os.path.join(urdfs_path, "train")
+urdfs_val_path = os.path.join(urdfs_path, "val")
+urdfs_test_path = os.path.join(urdfs_path, "test")
 
 with open("template.urdf", "r") as f:
-    template_urdf_lines = f.readlines()
+    template_urdf = f.read()
 
 
 def generate_urdf(dataset, dataset_path):
-    for hdf5 in dataset:
+    print(dataset_path)
+
+    for hdf5 in tqdm(dataset):
         hdf5_name = hdf5.strip()
         grasps = h5py.File(os.path.join(acronym_grasps_path, hdf5_name), 'r')
 
-        obj_name = grasps['object/file'][()].decode('ascii')
-        obj_name = obj_name[obj_name.rfind("/") + 1:obj_name.rfind(".")]
-        obj_mass = grasps['object/mass'][()]
+        obj_path = os.path.join(acronym_path, grasps['object/file'][()].decode('ascii'))
+        obj_name = obj_path[obj_path.rfind("/") + 1:obj_path.rfind(".")]
+        obj_mass = str(grasps['object/mass'][()])
 
-        urdf_lines = template_urdf_lines.copy()
-        for i in range(len(urdf_lines)):
-            urdf_lines[i] = urdf_lines[i].replace("obj_name", obj_name)
-            urdf_lines[i] = urdf_lines[i].replace("obj_mass", str(obj_mass))
-
-        urdf_name = hdf5_name[:hdf5_name.rfind(".") + 1:] + ".urdf"
-
-        with open(os.path.join(dataset_path, urdf_name), "w") as f:
-            f.writelines(urdf_lines)
+        urdf = template_urdf.replace("obj_path", obj_path).replace("obj_name", obj_name).replace("obj_mass", obj_mass)
+        urdf_name = hdf5_name[:hdf5_name.rfind(".")] + ".urdf"
+        with open(os.path.join(dataset_path, urdf_name), "w") as uf:
+            uf.writelines(urdf)
 
 
 with open(os.path.join(acronym_path, "train_set.txt"), "r") as f:
